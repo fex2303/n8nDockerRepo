@@ -1,15 +1,21 @@
-# Use official n8n base image
+# Use official n8n base image (Alpine-based)
 FROM n8nio/n8n:latest
 
-# Switch to root to install packages
+# Switch to root user for installing system packages
 USER root
 
-# Install LibreOffice and fonts
-RUN apt-get update && \
-    apt-get install -y libreoffice libreoffice-writer fonts-dejavu fonts-liberation && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Install Python 3, pip, LibreOffice, and fonts
+RUN apk update && \
+    apk add --no-cache \
+        python3 \
+        py3-pip \
+        libreoffice \
+        font-dejavu \
+        font-liberation && \
+    rm -rf /var/cache/apk/*
+
+# Optionally install common Python packages (uncomment to use)
+# RUN pip install pandas openpyxl requests
 
 # Switch back to n8n user
 USER node
-    
